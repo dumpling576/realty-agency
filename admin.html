@@ -1,26 +1,550 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ua">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Golden Realty | Панель Управління</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome (for icons like bed, bath, ruler) -->
+    <!-- Font Awesome (for icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --color-primary: #a37d3a; /* Насичений Золотий */
+            --color-secondary: #f4f0e6; /* Світлий беж */
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-secondary);
+        }
+
+        /* Стилі для основного контейнера */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+        }
+
+        /* Кнопка */
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #8c6a32;
+        }
+
+        /* Картка форми */
+        .form-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Заголовки */
+        h1, h2 {
+            color: #1f2937;
+        }
+        
+        /* Стилі для поля вводу */
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            border-color: var(--color-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(163, 125, 58, 0.2);
+        }
+
+        /* Картка об'єкта в адмінці */
+        .property-item-admin {
+            background-color: white;
+            border-radius: 8px;
+            border-left: 5px solid var(--color-primary);
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .property-info-admin {
+            flex-grow: 1;
+        }
+
+        .property-actions-admin button {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <header class="bg-gray-800 p-4 shadow-lg sticky top-0 z-10">
+        <div class="container flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">Адмін Панель Golden Realty</h1>
+            <a href="index.html" class="text-white hover:text-gray-300 transition duration-150">
+                <i class="fas fa-home mr-1"></i> На Головну
+            </a>
+        </div>
+    </header>
+
+    <main class="container py-8">
+        <!-- Інформація про користувача/авторизацію -->
+        <div id="auth-status" class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-lg" role="alert">
+            <p class="font-bold">Статус Авторизації</p>
+            <p id="user-id">Завантаження...</p>
+        </div>
+
+        <!-- Секція Форми Управління -->
+        <div class="form-card">
+            <h2 id="form-title" class="text-3xl font-semibold mb-6">Додати Новий Об'єкт</h2>
+            <form id="property-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Скрите поле для ID об'єкта при редагуванні -->
+                <input type="hidden" id="property-id" value="">
+                
+                <!-- Заголовок UA -->
+                <div>
+                    <label for="title_ua" class="block text-sm font-medium text-gray-700">Заголовок (UA)</label>
+                    <input type="text" id="title_ua" required placeholder="Напр. Ексклюзивний пентхаус в центрі">
+                </div>
+                
+                <!-- Заголовок EN -->
+                <div>
+                    <label for="title_en" class="block text-sm font-medium text-gray-700">Заголовок (EN)</label>
+                    <input type="text" id="title_en" required placeholder="E.g., Exclusive penthouse in the center">
+                </div>
+
+                <!-- Опис UA -->
+                <div class="md:col-span-2">
+                    <label for="description_ua" class="block text-sm font-medium text-gray-700">Опис (UA)</label>
+                    <textarea id="description_ua" rows="4" required placeholder="Детальний опис об'єкта"></textarea>
+                </div>
+                
+                <!-- Опис EN -->
+                <div class="md:col-span-2">
+                    <label for="description_en" class="block text-sm font-medium text-gray-700">Опис (EN)</label>
+                    <textarea id="description_en" rows="4" required placeholder="Detailed description of the property"></textarea>
+                </div>
+
+                <!-- Ціна ($) -->
+                <div>
+                    <label for="price" class="block text-sm font-medium text-gray-700">Ціна (USD)</label>
+                    <input type="number" id="price" required min="1" placeholder="150000">
+                </div>
+
+                <!-- Площа (кв.м) -->
+                <div>
+                    <label for="area" class="block text-sm font-medium text-gray-700">Площа (кв.м)</label>
+                    <input type="number" id="area" required min="1" placeholder="85">
+                </div>
+
+                <!-- Спальні -->
+                <div>
+                    <label for="bedrooms" class="block text-sm font-medium text-gray-700">Спальні</label>
+                    <input type="number" id="bedrooms" required min="0" placeholder="2">
+                </div>
+                
+                <!-- Ванні кімнати -->
+                <div>
+                    <label for="bathrooms" class="block text-sm font-medium text-gray-700">Ванні кімнати</label>
+                    <input type="number" id="bathrooms" required min="0" placeholder="1">
+                </div>
+                
+                <!-- Місто -->
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700">Місто</label>
+                    <select id="city" required>
+                        <option value="Kyiv">Київ</option>
+                        <option value="Lviv">Львів</option>
+                        <option value="Odesa">Одеса</option>
+                    </select>
+                </div>
+                
+                <!-- Тип -->
+                <div>
+                    <label for="type" class="block text-sm font-medium text-gray-700">Тип Нерухомості</label>
+                    <select id="type" required>
+                        <option value="apartment">Квартира</option>
+                        <option value="house">Будинок</option>
+                        <option value="land">Земельна ділянка</option>
+                    </select>
+                </div>
+
+                <!-- Блок для URL зображень (до 5) -->
+                <div class="md:col-span-2 pt-4 border-t border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">URL Зображень (мін. 1, макс. 5)</h3>
+                    <label for="imageUrl1" class="block text-sm font-medium text-gray-700">Зображення 1 (Основне)</label>
+                    <input type="text" id="imageUrl1" required placeholder="https://placehold.co/600x400/808080/FFFFFF?text=Main">
+                    
+                    <label for="imageUrl2" class="block text-sm font-medium text-gray-700">Зображення 2</label>
+                    <input type="text" id="imageUrl2" placeholder="https://placehold.co/600x400/808080/FFFFFF?text=2">
+
+                    <label for="imageUrl3" class="block text-sm font-medium text-gray-700">Зображення 3</label>
+                    <input type="text" id="imageUrl3" placeholder="https://placehold.co/600x400/808080/FFFFFF?text=3">
+                    
+                    <label for="imageUrl4" class="block text-sm font-medium text-gray-700">Зображення 4</label>
+                    <input type="text" id="imageUrl4" placeholder="https://placehold.co/600x400/808080/FFFFFF?text=4">
+                    
+                    <label for="imageUrl5" class="block text-sm font-medium text-gray-700">Зображення 5</label>
+                    <input type="text" id="imageUrl5" placeholder="https://placehold.co/600x400/808080/FFFFFF?text=5">
+                </div>
+
+                <!-- Кнопки дій -->
+                <div class="md:col-span-2 flex justify-end space-x-4">
+                    <button type="button" id="cancel-edit-btn" class="hidden bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150">
+                        <i class="fas fa-times mr-1"></i> Скасувати Редагування
+                    </button>
+                    <button type="submit" id="submit-btn" class="btn-primary flex items-center">
+                        <i class="fas fa-save mr-2"></i> Зберегти Об'єкт
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Секція Списку Об'єктів (для редагування/видалення) -->
+        <h2 class="text-3xl font-semibold mb-4 mt-8">Існуючі Об'єкти</h2>
+        <div id="properties-list-admin" class="space-y-4">
+            <!-- Тут будуть завантажені об'єкти -->
+            <p id="loading-msg" class="text-gray-500 text-center py-4">Завантаження об'єктів...</p>
+        </div>
+    </main>
+
+    <!-- Modal for confirmation -->
+    <div id="delete-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+            <h3 class="text-xl font-bold mb-4">Підтвердження Видалення</h3>
+            <p class="mb-6">Ви впевнені, що хочете видалити цей об'єкт?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-delete-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-150">Скасувати</button>
+                <button id="confirm-delete-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150">Видалити</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase/Firestore Imports and Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the environment (MANDATORY)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth, userId;
+        let isAuthReady = false;
+        
+        // --- 1. FIREBASE INITIALIZATION & AUTHENTICATION ---
+        const initFirebase = async () => {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // 1.1 Authentication setup
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        document.getElementById('user-id').textContent = `ID Користувача (UID): ${userId}`;
+                        isAuthReady = true;
+                        // Start listening to data only after successful auth
+                        setupPropertyListener();
+                    } else {
+                        // Sign in if not authenticated
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            // Fallback to anonymous sign-in if no token is provided
+                            await signInAnonymously(auth);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Помилка ініціалізації Firebase:", error);
+                document.getElementById('user-id').textContent = 'Помилка ініціалізації. Перевірте консоль.';
+            }
+        };
+
+        // --- 2. FIRESTORE UTILITIES ---
+        const PROPERTIES_COLLECTION_PATH = `/artifacts/${appId}/public/data/properties`;
+
+        const getPropertyRef = (id) => doc(db, PROPERTIES_COLLECTION_PATH, id);
+        const getPropertiesCollectionRef = () => collection(db, PROPERTIES_COLLECTION_PATH);
+
+        // --- 3. CRUD OPERATIONS ---
+
+        // Helper to reset the form
+        const resetForm = () => {
+            document.getElementById('property-form').reset();
+            document.getElementById('property-id').value = '';
+            document.getElementById('form-title').textContent = 'Додати Новий Об\'єкт';
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save mr-2"></i> Зберегти Об\'єкт';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        };
+
+        // 3.1. Add or Edit Property
+        const addOrEditProperty = async (e) => {
+            e.preventDefault();
+            
+            if (!isAuthReady || !userId) {
+                console.error("Система не готова або користувач не авторизований.");
+                alertMessage('Система не готова або не авторизована!', 'error');
+                return;
+            }
+
+            // Збір URL зображень
+            const imageUrls = [];
+            for (let i = 1; i <= 5; i++) {
+                const url = document.getElementById(`imageUrl${i}`).value.trim();
+                if (url) {
+                    imageUrls.push(url);
+                }
+            }
+            
+            if (imageUrls.length === 0) {
+                 alertMessage('Потрібно додати хоча б одне URL зображення.', 'error');
+                 return;
+            }
+
+            // Get values from form
+            const id = document.getElementById('property-id').value;
+            const propertyData = {
+                title_ua: document.getElementById('title_ua').value,
+                title_en: document.getElementById('title_en').value,
+                description_ua: document.getElementById('description_ua').value,
+                description_en: document.getElementById('description_en').value,
+                price: parseFloat(document.getElementById('price').value),
+                area: parseFloat(document.getElementById('area').value),
+                bedrooms: parseInt(document.getElementById('bedrooms').value, 10),
+                bathrooms: parseInt(document.getElementById('bathrooms').value, 10),
+                city: document.getElementById('city').value,
+                type: document.getElementById('type').value,
+                // Використовуємо масив URL-адрес
+                imageUrls: imageUrls, 
+                updatedAt: new Date().getTime(),
+            };
+            
+            // Validate essential fields
+            if (!propertyData.title_ua || !propertyData.price || !propertyData.area) {
+                console.error("Будь ласка, заповніть усі обов'язкові поля.");
+                alertMessage("Будь ласка, заповніть усі обов'язкові текстові/числові поля.", 'error');
+                return;
+            }
+
+            try {
+                if (id) {
+                    // Editing existing property
+                    const docRef = getPropertyRef(id);
+                    await setDoc(docRef, propertyData, { merge: true });
+                    console.log(`Об'єкт з ID: ${id} успішно оновлено.`);
+                    alertMessage('Об\'єкт оновлено!', 'success');
+                } else {
+                    // Adding new property
+                    await addDoc(getPropertiesCollectionRef(), {
+                        ...propertyData,
+                        createdAt: new Date().getTime(),
+                        authorId: userId // Track who created it
+                    });
+                    console.log("Новий об'єкт успішно додано.");
+                    alertMessage('Новий об\'єкт додано!', 'success');
+                }
+                resetForm(); // Reset form after successful operation
+            } catch (error) {
+                console.error("Помилка збереження об'єкта:", error);
+                alertMessage('Помилка збереження!', 'error');
+            }
+        };
+
+        // 3.2. Set form for editing
+        const loadForEdit = (property) => {
+            document.getElementById('property-id').value = property.id;
+            document.getElementById('title_ua').value = property.title_ua || '';
+            document.getElementById('title_en').value = property.title_en || '';
+            document.getElementById('description_ua').value = property.description_ua || '';
+            document.getElementById('description_en').value = property.description_en || '';
+            document.getElementById('price').value = property.price || 0;
+            document.getElementById('area').value = property.area || 0;
+            document.getElementById('bedrooms').value = property.bedrooms || 0;
+            document.getElementById('bathrooms').value = property.bathrooms || 0;
+            document.getElementById('city').value = property.city || 'Kyiv';
+            document.getElementById('type').value = property.type || 'apartment';
+            
+            // Завантаження URL зображень
+            const images = property.imageUrls || [];
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`imageUrl${i}`).value = images[i - 1] || '';
+            }
+
+            document.getElementById('form-title').textContent = `Редагування Об'єкта: ${property.title_ua}`;
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-pencil-alt mr-2"></i> Оновити';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            
+            // Scroll to the form
+            document.getElementById('form-title').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // 3.3. Delete Property (using Modal)
+        let propertyToDeleteId = null;
+
+        const showDeleteModal = (id) => {
+            propertyToDeleteId = id;
+            document.getElementById('delete-modal').classList.remove('hidden');
+            document.getElementById('delete-modal').classList.add('flex');
+        };
+
+        const hideDeleteModal = () => {
+            propertyToDeleteId = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+            document.getElementById('delete-modal').classList.remove('flex');
+        };
+
+        const confirmDelete = async () => {
+            if (!propertyToDeleteId || !isAuthReady) return;
+
+            try {
+                await deleteDoc(getPropertyRef(propertyToDeleteId));
+                console.log(`Об'єкт з ID: ${propertyToDeleteId} успішно видалено.`);
+                alertMessage('Об\'єкт видалено!', 'success');
+            } catch (error) {
+                console.error("Помилка видалення об'єкта:", error);
+                alertMessage('Помилка видалення!', 'error');
+            } finally {
+                hideDeleteModal();
+            }
+        };
+        
+        // --- 4. DATA LISTENER & RENDERING ---
+
+        const renderPropertiesList = (properties) => {
+            const listContainer = document.getElementById('properties-list-admin');
+            listContainer.innerHTML = ''; // Clear previous content
+
+            if (properties.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-gray-500 py-8">Поки немає жодного об\'єкта.</p>';
+                return;
+            }
+
+            properties.forEach(property => {
+                const item = document.createElement('div');
+                item.className = 'property-item-admin';
+                item.innerHTML = `
+                    <div class="property-info-admin">
+                        <p class="font-bold text-lg">${property.title_ua} <span class="text-gray-500 text-sm">(${property.id})</span></p>
+                        <p class="text-gray-600">${property.city}, ${property.area} м²</p>
+                    </div>
+                    <div class="property-actions-admin">
+                        <button onclick="window.loadForEdit('${property.id}')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 text-sm">
+                            <i class="fas fa-edit mr-1"></i> Редагувати
+                        </button>
+                        <button onclick="window.showDeleteModal('${property.id}')" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 text-sm">
+                            <i class="fas fa-trash-alt mr-1"></i> Видалити
+                        </button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+
+                // Attach the full property object to the window for easy lookup when editing
+                window[`property_${property.id}`] = property;
+            });
+        };
+
+        const setupPropertyListener = () => {
+            if (!db) return;
+
+            const q = query(getPropertiesCollectionRef());
+
+            // Listen for real-time changes
+            onSnapshot(q, (snapshot) => {
+                document.getElementById('loading-msg').style.display = 'none';
+                const properties = [];
+                snapshot.forEach(doc => {
+                    // Spread the data and add the ID
+                    properties.push({ id: doc.id, ...doc.data() });
+                });
+                // Sort by creation date (newest first)
+                properties.sort((a, b) => b.createdAt - a.createdAt);
+                
+                renderPropertiesList(properties);
+            }, (error) => {
+                console.error("Помилка отримання даних з Firestore:", error);
+                document.getElementById('properties-list-admin').innerHTML = '<p class="text-center text-red-500 py-8">Помилка завантаження даних.</p>';
+            });
+        };
+
+        // --- 5. UI/EVENT LISTENERS ---
+        
+        // Global message helper (simple replacement for alert())
+        const alertMessage = (message, type) => {
+            const colors = {
+                success: 'bg-green-100 border-green-500 text-green-700',
+                error: 'bg-red-100 border-red-500 text-red-700'
+            };
+            const statusDiv = document.getElementById('auth-status');
+            const originalContent = statusDiv.innerHTML;
+            const originalClass = statusDiv.className;
+
+            // Temporarily replace content with alert message
+            statusDiv.className = `border-l-4 p-4 mb-6 rounded-lg ${colors[type]}`;
+            statusDiv.innerHTML = `<p class="font-bold">${type === 'success' ? 'Успіх!' : 'Помилка!'}</p><p>${message}</p>`;
+
+            // Revert after 3 seconds
+            setTimeout(() => {
+                statusDiv.className = originalClass;
+                statusDiv.innerHTML = originalContent;
+                document.getElementById('user-id').textContent = `ID Користувача (UID): ${userId || 'Завантаження...'}`;
+            }, 3000);
+        };
+        
+        window.onload = () => {
+            initFirebase();
+            
+            // Set up form submission handler
+            document.getElementById('property-form').onsubmit = addOrEditProperty;
+
+            // Set up cancel edit handler
+            document.getElementById('cancel-edit-btn').onclick = resetForm;
+            
+            // Set up modal buttons
+            document.getElementById('cancel-delete-btn').onclick = hideDeleteModal;
+            document.getElementById('confirm-delete-btn').onclick = confirmDelete;
+        };
+
+        // Expose functions globally for inline HTML event handlers (like onclick)
+        window.loadForEdit = (id) => {
+            const property = window[`property_${id}`];
+            if (property) {
+                loadForEdit(property);
+            } else {
+                console.error('Об\'єкт для редагування не знайдено:', id);
+            }
+        };
+        window.showDeleteModal = showDeleteModal;
+
+    </script>
 </body>
 </html>
