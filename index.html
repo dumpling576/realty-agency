@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title will be updated by script for translation -->
+    <title data-key="title">Golden Realty | Елітна Нерухомість у Києві</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (for icons like bed, bath, ruler) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Combined style.css content -->
+    <style>
+      :root {
+          --color-primary: #a37d3a; /* Насичений Золотий */
+          --color-secondary: #c5a159; /* Світлий Золотистий (для фокусу) */
+          --color-cream: #FDFDF7; /* Світлий, майже білий фон */
+          --color-dark: #2B2E38; /* Темно-сірий/Майже чорний */
+      }
+      body {
+          font-family: 'Inter', sans-serif;
+          background-color: var(--color-cream);
+          color: var(--color-dark);
+          min-height: 100vh;
+      }
+      .text-golden { color: var(--color-primary); }
+      .bg-golden { background-color: var(--color-primary); }
+      .bg-golden-light { background-color: var(--color-secondary); }
+
+      .ring-golden-focus:focus {
+          outline: 2px solid transparent;
+          outline-offset: 2px;
+          box-shadow: 0 0 0 2px var(--color-primary);
+      }
+      .btn-primary {
+          background-color: var(--color-primary);
+          color: white;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 12px rgba(217, 165, 77, 0.4);
+      }
+      .btn-primary:hover {
+          background-color: #8c6a2d; /* Трохи темніше */
+          box-shadow: 0 6px 16px rgba(217, 165, 77, 0.6);
+          transform: translateY(-1px);
+      }
+      .card-shadow {
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+          transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+      }
+      .card-shadow:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Стилі для модального вікна */
+      .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.6);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+      }
+      .modal-content {
+          background-color: var(--color-cream);
+          color: var(--color-dark);
+          max-width: 90%;
+          border-radius: 1rem;
+          padding: 2rem;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+          max-height: 90vh;
+          overflow-y: auto;
+      }
+
+      /* Стилі для форми пошуку */
+      .complex-search-card {
+          background-color: #ffffff;
+          border-radius: 1.5rem;
+          padding: 2.5rem;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          border: 1px solid #e5e7eb;
+          max-width: 1200px;
+          margin: -80px auto 0 auto; /* Зміщення вгору над секцією */
+          z-index: 10;
+          position: relative;
+      }
+      .complex-search-card h2 {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          color: var(--color-dark);
+          text-align: center;
+      }
+      .complex-search-card label {
+          font-weight: 700;
+          color: #555;
+          margin-bottom: 0.5rem;
+          display: block;
+      }
+      .complex-search-card select,
+      .complex-search-card input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 1px solid #ddd;
+          border-radius: 0.75rem;
+          background-color: var(--color-cream);
+          transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .complex-search-card select:focus,
+      .complex-search-card input:focus {
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.1);
+      }
+      .complex-search-card .filter-row {
+          display: flex;
+          gap: 2rem;
+          margin-top: 0.5rem;
+          flex-wrap: wrap;
+      }
+      .complex-search-card .btn-primary {
+          background: var(--color-secondary);
+          color: #ffffff;
+          font-weight: 700;
+          font-size: 2rem;
+          border-radius: 1.1rem;
+          padding: 1.1rem 0;
+          box-shadow: 0 4px 15px rgba(249, 168, 37, 0.18);
+          transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+      }
+      .complex-search-card .btn-primary:hover,
+      .complex-search-card .btn-primary:focus {
+          background: var(--color-primary);
+          box-shadow: 0 8px 24px rgba(249, 168, 37, 0.3);
+          transform: translateY(-2px);
+      }
+
+      .card-text {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 1rem;
+          font-size: 1.125rem;
+          line-height: 1.75rem;
+          color: var(--color-dark);
+          background-color: var(--color-cream);
+          display: block;
+      }
+      .card-text h5 {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+          text-align: center;
+          background-color: var(--color-cream);
+          color: var(--color-dark);
+      }
+    
+
+      .carousel-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        border-radius: 2rem;
+        overflow: hidden;
+      }
+    
+     .map {
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        margin: 2rem 0;
+     }
+    
+    
+      
+    </style>
+    <!-- Custom Tailwind Config (to use custom colors) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'golden': '#a37d3a', // Primary
+                        'golden-light': '#c5a159', // Secondary
+                        'cream': '#FDFDF7',
+                        'dark': '#2B2E38',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Auth/Message Modals -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="modal-content" class="modal-content w-full max-w-md">
+            <!-- Modal content (Message) will be injected here -->
+        </div>
+    </div>
+
+    <!-- HEADER (Sticky) -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#properties" class="text-2xl font-extrabold text-dark flex items-center">
+                <src><img src="Obrázok1.png" width="50" height="50"></src>
+                Golden Realty
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="#properties" data-key="nav_listings" class="text-dark hover:text-golden transition duration-300">Об'єкти</a>
+                <a href="#about" data-key="nav_about" class="text-dark hover:text-golden transition duration-300">Про нас</a>
+                <a href="#contact" data-key="nav_contact" class="text-dark hover:text-golden transition duration-300">Контакти</a>
+                <!-- Admin Link (ALWAYS visible) -->
+                <a id="nav-admin" href="#admin" data-key="nav_admin_panel" class="text-dark hover:text-red-500 font-bold transition duration-300">Адмін-Панель</a>
+            </nav>
+
+            <!-- Actions (Language) -->
+            <div class="flex items-center space-x-3">
+                
+                <!-- Language Switcher -->
+                <div class="flex items-center space-x-1 border border-gray-300 rounded-full p-1">
+                    <button id="lang-ua" class="px-2 py-1 rounded-full text-sm font-semibold bg-golden text-white" onclick="setLanguage('ua')">UA</button>
+                    <button id="lang-en" class="px-2 py-1 rounded-full text-sm font-semibold text-gray-600" onclick="setLanguage('en')">EN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="flex-grow">
+        
+        <!-- --- HOME/PROPERTIES VIEW --- -->
+        <div id="home-view" class="view">
+            <!-- Hero Section (for visual appeal) -->
+            <section id="hero" class="relative bg-dark h-96 flex items-center justify-center overflow-hidden">
+                <!-- Placeholder for background image/video -->
+                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://static.tildacdn.com/tild3131-6663-4230-b331-373431316165/breather187923.jpg');"></div>
+                
+                <div class="relative z-10 text-center text-white p-4">
+                    <h1 data-key="hero_title" class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">Ваш Ключ до Елітної Нерухомості</h1>
+                    <p data-key="hero_subtitle" class="text-xl md:text-2xl font-light">Преміальні об'єкти в центрі Києва.</p>
+                </div>
+            </section>
+
+            <!-- Advanced Search Card (Placed on top of Hero/Section) -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="complex-search-card">
+                    <h2 data-key="search_title">Розширений Пошук Нерухомості</h2>
+                    <form id="property-search-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <!-- Deal Type -->
+                            <div class="col-span-1">
+                                <label data-key="filter_deal_label" for="filter_deal">Тип угоди</label>
+                                <select id="filter_deal" name="deal" class="ring-golden-focus">
+                                    <option value="" data-key="filter_deal_all">Всі</option>
+                                    <option value="sale" data-key="filter_deal_sale">Продаж</option>
+                                    <option value="rent" data-key="filter_deal_rent">Оренда</option>
+                                </select>
+                            </div>
+                            <!-- Property Type -->
+                            <div class="col-span-1">
+                                <label data-key="filter_type_label" for="filter_type">Тип нерухомості</label>
+                                <select id="filter_type" name="type" class="ring-golden-focus">
+                                    <option value="" data-key="filter_type_all">Всі</option>
+                                    <option value="apartment" data-key="filter_type_apartment">Квартира</option>
+                                    <option value="house" data-key="filter_type_house">Будинок</option>
+                                    <option value="office" data-key="filter_type_office">Офіс</option>
+                                </select>
+                            </div>
+                            <!-- District -->
+                            <div class="col-span-1">
+                                <label data-key="filter_district_label" for="filter_district">Район</label>
+                                <select id="filter_district" name="district" class="ring-golden-focus">
+                                    <option value="" data-key="filter_district_all">Всі Райони</option>
+                                    <option value="Pechersk">Печерський</option>
+                                    <option value="Podil">Подільський</option>
+                                    <option value="Shevchenkivskyi">Шевченківський</option>
+                                </select>
+                            </div>
+                            <!-- Rooms -->
+                            <div class="col-span-1">
+                                <label data-key="filter_rooms_label" for="filter_rooms">Кімнати (Мін.)</label>
+                                <input type="number" id="filter_rooms" name="rooms" min="1" placeholder="1+" class="ring-golden-focus">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                            <!-- Min Price -->
+                            <div class="col-span-1">
+                                <label data-key="filter_price_min_label" for="filter_price_min">Ціна (Мін, $)</label>
+                                <input type="number" id="filter_price_min" name="price_min" min="0" placeholder="1000" class="ring-golden-focus">
+                            </div>
+                            <!-- Max Price -->
+                            <div class="col-span-1">
+                                <label data-key="filter_price_max_label" for="filter_price_max">Ціна (Макс, $)</label>
+                                <input type="number" id="filter_price_max" name="price_max" min="0" placeholder="1000000" class="ring-golden-focus">
+                            </div>
+                            <!-- Min Area -->
+                            <div class="col-span-1">
+                                <label data-key="filter_area_min_label" for="filter_area_min">Площа (Мін, м²)</label>
+                                <input type="number" id="filter_area_min" name="area_min" min="1" placeholder="50" class="ring-golden-focus">
+                            </div>
+                            <!-- Bathrooms -->
+                            <div class="col-span-1">
+                                <label data-key="filter_baths_label" for="filter_baths">Ванні (Мін.)</label>
+                                <input type="number" id="filter_baths" name="baths" min="1" placeholder="1+" class="ring-golden-focus">
+                            </div>
+                            
+                            <!-- Search Button -->
+                            <div class="col-span-1 flex items-end">
+                                <button data-key="search_button" type="submit" class="btn-primary w-full py-3 rounded-xl font-bold transition duration-300">
+                                    Шукати
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Property Listings Section -->
+            <section id="properties" class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <h2 data-key="listings_title" class="text-4xl font-extrabold text-dark mb-10 text-center pt-8">
+                    Доступні Об'єкти Нерухомості
+                </h2>
+                
+                <!-- List of Properties -->
+                <div id="property-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <p id="loading-message" class="col-span-full text-center text-xl text-gray-500" data-key="loading">Завантаження об'єктів...</p>
+                    <p id="no-properties-message" class="col-span-full text-center text-xl text-gray-500 hidden" data-key="no_listings">
+                        На жаль, за вашими критеріями не знайдено жодного об'єкта.
+                    </p>
+                    <!-- Property cards will be injected here by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+
+        <!-- --- ADMIN PANEL VIEW --- -->
+        <div id="admin-view" class="view hidden">
+            <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 data-key="admin_panel_title" class="text-4xl font-extrabold text-dark border-l-4 border-golden pl-4">
+                        Адміністрування Об'єктів
+                    </h2>
+                    <button id="show-add-form-btn" class="btn-primary font-bold py-3 px-6 rounded-xl transition duration-300">
+                        <i class="fa-solid fa-plus mr-2"></i> <span data-key="admin_add_property_btn">Додати Новий Об'єкт</span>
+                    </button>
+                </div>
+                
+                <!-- Admin Panel Table (CRUD Operations) -->
+                <div id="admin-table-container" class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 overflow-x-auto">
+                    <!-- Table will be injected here by renderAdminTable() -->
+                </div>
+
+                <!-- Admin Panel Form (CRUD Form - always visible in Admin View) -->
+                <div id="admin-form-container" class="max-w-4xl mx-auto my-16 hidden">
+                    <div class="bg-white p-6 rounded-xl shadow-2xl border-l-4 border-golden">
+                        <h3 id="admin-form-title" class="text-2xl font-bold mb-4 text-golden"></h3>
+                        
+                        <form id="admin-add-edit-form" class="space-y-4">
+                            <input type="hidden" name="id">
+                            
+                            <!-- Property Type, Deal, District, Image -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_type">Тип</label>
+                                    <select id="admin_type" name="type" required class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                        <option value="apartment">Квартира</option>
+                                        <option value="house">Будинок</option>
+                                        <option value="office">Офіс</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_deal">Угода</label>
+                                    <select id="admin_deal" name="deal" required class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                        <option value="sale">Продаж</option>
+                                        <option value="rent">Оренда</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_district">Район</label>
+                                    <select id="admin_district" name="district" required class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                        <option value="Pechersk">Печерський</option>
+                                        <option value="Podil">Подільський</option>
+                                        <option value="Shevchenkivskyi">Шевченківський</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_image">URL Зображення</label>
+                                    <input type="text" id="admin_image" name="image" required placeholder="https://placehold.co/600x400" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                </div>
+                            </div>
+
+                            <!-- Price, Area, Rooms, Baths -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_price">Ціна ($)</label>
+                                    <input type="number" id="admin_price" name="price" required min="1000" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_area">Площа (м²)</label>
+                                    <input type="number" id="admin_area" name="area" required min="10" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_rooms">Кімнати</label>
+                                    <input type="number" id="admin_rooms" name="rooms" required min="1" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" for="admin_baths">Ванні</label>
+                                    <input type="number" id="admin_baths" name="baths" required min="1" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                                </div>
+                            </div>
+
+                            <!-- Title/Description UA -->
+                            <div><label class="block text-sm font-medium text-gray-700" for="admin_title_ua">Заголовок (UA)</label>
+                                <input type="text" id="admin_title_ua" name="title_ua" required placeholder="Розкішна квартира з видом на Дніпро" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700" for="admin_description_ua">Опис (UA)</label>
+                                <textarea id="admin_description_ua" name="description_ua" rows="3" required placeholder="Повний опис об'єкта" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus"></textarea>
+                            </div>
+
+                            <!-- Title/Description EN -->
+                            <div><label class="block text-sm font-medium text-gray-700" for="admin_title_en">Заголовок (EN)</label>
+                                <input type="text" id="admin_title_en" name="title_en" required placeholder="Luxury apartment with a view of the Dnipro" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700" for="admin_description_en">Опис (EN)</label>
+                                <textarea id="admin_description_en" name="description_en" rows="3" required placeholder="Full property description" class="w-full mt-1 p-2 border border-gray-300 rounded-md ring-golden-focus"></textarea>
+                            </div>
+                            
+                            <!-- Features Checkboxes -->
+                            <div class="space-y-2">
+                                <label class="block text-base font-bold text-gray-800">Особливості</label>
+                                <div class="flex flex-wrap gap-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="nearCenter" id="admin_nearCenter" class="form-checkbox text-golden rounded ring-golden-focus">
+                                        <span class="ml-2 text-gray-700">Біля Центру</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="nearMetro" id="admin_nearMetro" class="form-checkbox text-golden rounded ring-golden-focus">
+                                        <span class="ml-2 text-gray-700">Біля Метро</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="nearSchool" id="admin_nearSchool" class="form-checkbox text-golden rounded ring-golden-focus">
+                                        <span class="ml-2 text-gray-700">Біля Школи/Дитсадка</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="flex justify-end space-x-4 pt-4 border-t">
+                                <button type="button" onclick="toggleAdminForm(false)" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition duration-150">
+                                    <span data-key="admin_cancel">Скасувати</span>
+                                </button>
+                                <button id="form-submit-btn" type="submit" class="px-6 py-2 text-sm font-semibold text-white bg-golden rounded-md hover:bg-golden-light transition duration-150">
+                                    <span data-key="admin_add_property_btn_text">Додати Об'єкт</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="card-text">
+            <h5 data-key="carousel_title"><span>Апартаменти в Києві</span></h5>
+        </div>
+        <div class="carousel-wrapper">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="1.jpg" alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="2.jpg" alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="3.jpg" alt="Third slide">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Основной блок, который можно вставить в тело вашего HTML -->
+        <div class="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 text-gray-800 rounded-lg shadow-lg">
+            <!-- Header Section -->
+            <div class="text-center mb-12">
+                <h1 id="header-title" data-key="title" class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+                    Чому Обирають Нас?
+                </h1>
+                <p id="header-subtitle" data-key="subtitle" class="text-lg sm:text-xl max-w-2xl mx-auto text-gray-600">
+                    Відчуйте ідеальне поєднання комфорту, розкоші та зручності у наших історичних київських апартаментах.
+                </p>
+            </div>
+
+            <!-- Features List -->
+            <div class="space-y-12">
+
+                <!-- Feature Item 1: Comfort -->
+                <div class="flex flex-col sm:flex-row items-start sm:space-x-8">
+                    <!-- Icon: Home (SVG) -->
+                    <div class="flex-shrink-0 mb-4 sm:mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h3 data-key="f1_title" class="text-xl font-bold text-gray-900 mb-2">Комфорт</h3>
+                        <p data-key="f1_desc" class="text-gray-600">
+                            Відпочиньте та розслабтеся у наших просторих і добре облаштованих апартаментах, створених з думкою про ваш комфорт.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Item 2: Luxury -->
+                <div class="flex flex-col sm:flex-row items-start sm:space-x-8">
+                    <!-- Icon: Building/Store (SVG) -->
+                    <div class="flex-shrink-0 mb-4 sm:mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+                            <path d="M2 12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+                            <path d="M14 22V10a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v12"/>
+                            <path d="M16 10v12"/>
+                            <path d="M10 16h4"/>
+                        </svg>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h3 data-key="f2_title" class="text-xl font-bold text-gray-900 mb-2">Розкіш</h3>
+                        <p data-key="f2_desc" class="text-gray-600">
+                            Насолоджуйтесь кращими речами життя з нашими розкішними зручностями, включаючи м’яку постіль, сучасну техніку та захоплюючий вид на місто.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Item 3: Convenience -->
+                <div class="flex flex-col sm:flex-row items-start sm:space-x-8">
+                    <!-- Icon: Search/Magnifying Glass (SVG) -->
+                    <div class="flex-shrink-0 mb-4 sm:mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.3-4.3"/>
+                            <path d="M12 8l-3 3 3 3"/>
+                        </svg>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h3 data-key="f3_title" class="text-xl font-bold text-gray-900 mb-2">Зручність</h3>
+                        <p data-key="f3_desc" class="text-gray-600">
+                            Розташовані в серці історичного центру Києва, наші апартаменти пропонують легкий доступ до головних визначних пам’яток, ресторанів та магазинів міста.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Item 4: Contact Us -->
+                <div class="flex flex-col sm:flex-row items-start sm:space-x-8">
+                    <!-- Icon: At Sign (SVG) -->
+                    <div class="flex-shrink-0 mb-4 sm:mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="M16 12v1a3 3 0 0 0 6 0v-1c0-1.7-.8-3.2-2-4.2l-1.5-1.5a6 6 0 0 0-9 0L6.8 7.8c-1.2 1-2 2.5-2 4.2v1a3 3 0 0 0 6 0v-1"/>
+                        </svg>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h3 data-key="f4_title" class="text-xl font-bold text-gray-900 mb-2">Зв'яжіться з нами</h3>
+                        <p data-key="f4_desc" class="text-gray-600">
+                            Забронюйте своє перебування сьогодні та відчуйте ідеальне поєднання комфорту, розкоші та зручності у наших історичних київських апартаментах.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2540.4163604125347!2d30.500497576984266!3d50.45197098725376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce5e3eeefb3b%3A0xbd9ac181751dc908!2z0LLRg9C70LjRhtGPINCR0YPQu9GM0LLQsNGA0L3Qvi3QmtGD0LTRgNGP0LLRgdGM0LrQsCwgMTcsINCa0LjRl9CyLCDQo9C60YDQsNGX0L3QsCwgMDIwMDA!5e0!3m2!1suk!2ssk!4v1761311273035!5m2!1suk!2ssk" width="1100" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-cream mt-auto">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-xl font-extrabold mb-4 md:mb-0">
+                    Golden Realty
+                </div>
+                <nav class="flex space-x-6 mb-4 md:mb-0">
+                    <a href="#contact" data-key="nav_contact" class="text-cream hover:text-golden-light transition duration-300">Контакти</a>
+                    <a><ul>+38 073 722 68 18</ul><ul>goldenrealty@i.ua</ul></a>
+                </nav>
+                <p class="text-sm text-gray-400">&copy; <span id="current-year"></span> Golden Realty. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase JS SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, signInAnonymously, signInWithCustomToken, 
+            onAuthStateChanged // Зберігаємо onAuthStateChanged для отримання userId
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, doc, addDoc, setDoc, updateDoc, deleteDoc, 
+            onSnapshot, collection, query, where, getDoc, setLogLevel 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Глобальні змінні
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let isAdmin = true; // Тепер завжди true, оскільки немає кнопки "Увійти"
+
+        // Встановлення рівня логування Firebase для налагодження
+        setLogLevel('Debug');
+
+        // Глобальна змінна для зберігання об'єктів та поточної мови
+        window.latestProperties = [];
+        window.currentLanguage = 'ua';
+
+        // --- 1. Локалізація (i18n) ---
+        const translations = {
+            'ua': {
+                'title': 'Golden Realty | Елітна Нерухомість у Києві',
+                'nav_listings': 'Об\'єкти',
+                'nav_about': 'Про нас',
+                'nav_contact': 'Контакти',
+                'nav_admin_panel': 'Адмін-Панель',
+                'hero_title': 'Ваш Ключ до Елітної Нерухомості',
+                'hero_subtitle': 'Преміальні об\'єкти в центрі Києва.',
+                'search_title': 'Розширений Пошук Нерухомості',
+                'search_button': 'Шукати',
+                'listings_title': 'Об\'єкти Преміум Класу',
+                'loading': 'Завантаження об\'єктів...',
+                'no_listings': 'На жаль, за вашими критеріями не знайдено жодного об\'єкта.',
+                // Filters
+                'filter_deal_label': 'Тип угоди',
+                'filter_deal_all': 'Всі',
+                'filter_deal_sale': 'Продаж',
+                'filter_deal_rent': 'Оренда',
+                'filter_type_label': 'Тип нерухомості',
+                'filter_type_all': 'Всі',
+                'filter_type_apartment': 'Квартира',
+                'filter_type_house': 'Будинок',
+                'filter_type_office': 'Офіс',
+                'filter_district_label': 'Район',
+                'filter_district_all': 'Всі Райони',
+                'filter_rooms_label': 'Кімнати (Мін.)',
+                'filter_price_min_label': 'Ціна (Мін, $)',
+                'filter_price_max_label': 'Ціна (Макс, $)',
+                'filter_area_min_label': 'Площа (Мін, м²)',
+                'filter_baths_label': 'Ванні (Мін.)',
+                // Admin
+                'admin_panel_title': 'Адміністрування Об\'єктів',
+                'admin_add_property_btn': 'Додати Об\'єкт',
+                'admin_add_property_btn_text': 'Додати Об\'єкт',
+                'admin_edit_property_btn_text': 'Оновити Об\'єкт',
+                'admin_add_title': 'Додати Новий Об\'єкт',
+                'admin_edit_title': 'Редагувати Об\'єкт',
+                'admin_cancel': 'Скасувати',
+                'admin_delete_confirm': 'Ви впевнені, що хочете видалити цей об\'єкт?',
+                // Table
+                'table_title': 'Заголовок',
+                'table_type': 'Тип',
+                'table_deal': 'Угода',
+                'table_district': 'Район',
+                'table_price': 'Ціна ($)',
+                'table_area': 'Площа (м²)',
+                'table_actions': 'Дії',
+                'table_edit': 'Редагувати',
+                'table_delete': 'Видалити',
+                // Card
+                'card_sale': 'Продаж',
+                'card_rent': 'Оренда',
+                // Why Choose Us Section
+                'title': 'Чому Обирають Нас?',
+                'subtitle': 'Відчуйте ідеальне поєднання комфорту, розкоші та зручності у наших історичних київських апартаментах.',
+                'f1_title': 'Комфорт',
+                'f1_desc': 'Відпочиньте та розслабтеся у наших просторих і добре облаштованих апартаментах, створених з думкою про ваш комфорт.',
+                'f2_title': 'Розкіш',
+                'f2_desc': 'Насолоджуйтесь кращими речами життя з нашими розкішними зручностями, включаючи м’яку постіль, сучасну техніку та захоплюючий вид на місто.',
+                'f3_title': 'Зручність',
+                'f3_desc': 'Розташовані в серці історичного центру Києва, наші апартаменти пропонують легкий доступ до головних визначних пам’яток, ресторанів та магазинів міста.',
+                'f4_title': 'Зв\'яжіться з нами',
+                'f4_desc': 'Забронюйте своє перебування сьогодні та відчуйте ідеальне поєднання комфорту, розкоші та зручності у наших історичних київських апартаментах.',
+                //Carousel
+                'carousel_title': 'Апартаменти в Києві'
+                
+            },
+            'en': {
+                'title': 'Golden Realty | Elite Real Estate in Kyiv',
+                'nav_listings': 'Listings',
+                'nav_about': 'About Us',
+                'nav_contact': 'Contact',
+                'nav_admin_panel': 'Admin Panel',
+                'hero_title': 'Your Key to Elite Real Estate',
+                'hero_subtitle': 'Premium properties in the center of Kyiv.',
+                'search_title': 'Advanced Property Search',
+                'search_button': 'Search',
+                'listings_title': 'Premium Class Properties',
+                'loading': 'Loading properties...',
+                'no_listings': 'Unfortunately, no properties were found matching your criteria.',
+                // Filters
+                'filter_deal_label': 'Deal Type',
+                'filter_deal_all': 'All',
+                'filter_deal_sale': 'Sale',
+                'filter_deal_rent': 'Rent',
+                'filter_type_label': 'Property Type',
+                'filter_type_all': 'All',
+                'filter_type_apartment': 'Apartment',
+                'filter_type_house': 'House',
+                'filter_type_office': 'Office',
+                'filter_district_label': 'District',
+                'filter_district_all': 'All Districts',
+                'filter_rooms_label': 'Rooms (Min.)',
+                'filter_price_min_label': 'Price (Min, $)',
+                'filter_price_max_label': 'Price (Max, $)',
+                'filter_area_min_label': 'Area (Min, m²)',
+                'filter_baths_label': 'Baths (Min.)',
+                // Admin
+                'admin_panel_title': 'Property Administration',
+                'admin_add_property_btn': 'Add Property',
+                'admin_add_property_btn_text': 'Add Property',
+                'admin_edit_property_btn_text': 'Update Property',
+                'admin_add_title': 'Add New Property',
+                'admin_edit_title': 'Edit Property',
+                'admin_cancel': 'Cancel',
+                'admin_delete_confirm': 'Are you sure you want to delete this property?',
+                // Table
+                'table_title': 'Title',
+                'table_type': 'Type',
+                'table_deal': 'Deal',
+                'table_district': 'District',
+                'table_price': 'Price ($)',
+                'table_area': 'Area (m²)',
+                'table_actions': 'Actions',
+                'table_edit': 'Edit',
+                'table_delete': 'Delete',
+                // Card
+                'card_sale': 'For Sale',
+                'card_rent': 'For Rent',
+                // Why Choose Us Section
+                'title': 'Why Choose Us?',
+                'subtitle': 'Experience the perfect blend of comfort, luxury, and convenience in our historic Kyiv apartments.',
+                'f1_title': 'Comfort',
+                'f1_desc': 'Relax and unwind in our spacious and well-appointed apartments, designed with your comfort in mind.',
+                'f2_title': 'Luxury',
+                'f2_desc': 'Indulge in the finer things in life with our luxurious amenities, including plush bedding, modern appliances, and stunning views of the city.',
+                'f3_title': 'Convenience',
+                'f3_desc': 'Located in the heart of Kyiv\'s historic center, our apartments offer easy access to the city\'s top attractions, restaurants, and shopping.',
+                'f4_title': 'Contact Us',
+                'f4_desc': 'Book your stay today and experience the perfect blend of comfort, luxury, and convenience in our historic Kyiv apartments.',
+                //Carousel
+                'carousel_title': 'Apartments in Kyiv'
+            }
+        };
+
+        /**
+         * Перекладає всі елементи з атрибутом data-key на обрану мову.
+         * @param {string} lang - 'ua' або 'en'.
+         */
+        window.setLanguage = function(lang) {
+            window.currentLanguage = lang;
+            document.documentElement.lang = lang;
+            const t = translations[lang] || translations['ua'];
+
+            // Оновлення всіх елементів з data-key
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+
+            // Оновлення активної кнопки мови
+            const langUa = document.getElementById('lang-ua');
+            const langEn = document.getElementById('lang-en');
+
+            if (langUa && langEn) {
+                langUa.classList.remove('bg-golden', 'text-white', 'text-gray-600');
+                langEn.classList.remove('bg-golden', 'text-white', 'text-gray-600');
+
+                if (lang === 'ua') {
+                    langUa.classList.add('bg-golden', 'text-white');
+                    langEn.classList.add('text-gray-600');
+                } else {
+                    langEn.classList.add('bg-golden', 'text-white');
+                    langUa.classList.add('text-gray-600');
+                }
+            }
+
+            // Перерендеринг властивостей, якщо вони вже завантажені
+            renderProperties(window.latestProperties, lang);
+            
+            // Якщо ми на адмін-сторінці, оновлюємо таблицю
+            if (window.location.hash === '#admin') {
+                renderAdminTable(window.latestProperties, lang);
+            }
+
+            // Оновлення тексту заголовка адмін-форми, якщо вона активна
+            const formTitleEl = document.getElementById('admin-form-title');
+            const formEl = document.getElementById('admin-add-edit-form');
+            const submitBtn = document.getElementById('form-submit-btn');
+
+            if (formTitleEl && formEl && submitBtn) {
+                const editId = formEl.dataset.editId;
+                if (editId) {
+                    formTitleEl.textContent = t['admin_edit_title'];
+                    submitBtn.querySelector('span').textContent = t['admin_edit_property_btn_text'];
+                } else {
+                    formTitleEl.textContent = t['admin_add_title'];
+                    submitBtn.querySelector('span').textContent = t['admin_add_property_btn_text'];
+                }
+            }
+        };
+
+        // --- 2. Модальне вікно для повідомлень (замість alert/confirm) ---
+
+        /**
+         * Показує повідомлення (заміна alert)
+         * @param {string} title
+         * @param {string} message
+         */
+        function showMessage(title, message) {
+            const modalContent = document.getElementById('modal-content');
+            const modalOverlay = document.getElementById('modal-overlay');
+
+            if (!modalContent || !modalOverlay) return; // Захист від раннього виклику
+
+            modalContent.innerHTML = `
+                <div class="text-center p-4">
+                    <i class="fa-solid fa-bell text-golden text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">${title}</h3>
+                    <p class="text-gray-600 mb-4">${message}</p>
+                    <button id="modal-close-btn" class="btn-primary py-2 px-6 rounded-lg font-semibold">OK</button>
+                </div>
+            `;
+            modalOverlay.classList.remove('hidden');
+            document.getElementById('modal-close-btn').onclick = () => modalOverlay.classList.add('hidden');
+        }
+
+        /**
+         * Показує підтвердження (заміна confirm)
+         * @param {string} title
+         * @param {string} message
+         * @returns {Promise<boolean>}
+         */
+        function confirmMessage(title, message) {
+            return new Promise(resolve => {
+                const modalContent = document.getElementById('modal-content');
+                const modalOverlay = document.getElementById('modal-overlay');
+
+                if (!modalContent || !modalOverlay) {
+                    resolve(false); // Неможливо показати модальне вікно, тому відхиляємо
+                    return;
+                }
+
+                modalContent.innerHTML = `
+                    <div class="text-center p-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">${title}</h3>
+                        <p class="text-gray-600 mb-6">${message}</p>
+                        <div class="flex justify-center space-x-4">
+                            <button id="confirm-cancel-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-150">
+                                Скасувати
+                            </button>
+                            <button id="confirm-ok-btn" class="px-6 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-150">
+                                Підтвердити
+                            </button>
+                        </div>
+                    </div>
+                `;
+                modalOverlay.classList.remove('hidden');
+                
+                const close = () => modalOverlay.classList.add('hidden');
+                
+                document.getElementById('confirm-cancel-btn').onclick = () => { close(); resolve(false); };
+                document.getElementById('confirm-ok-btn').onclick = () => { close(); resolve(true); };
+            });
+        }
+
+
+        // --- 3. Налаштування Адмін-статусу (завжди активний) ---
+
+        function setupAuthUI(user) {
+            const adminNavLink = document.getElementById('nav-admin');
+            
+            if (!adminNavLink) return;
+            
+            // Адмін-панель завжди видима, оскільки функціонал входу вимкнено
+            adminNavLink.classList.remove('hidden');
+            
+            // Оновлення тексту посилання
+            setLanguage(window.currentLanguage);
+            
+            // Переконаємося, що ми не намагаємося перейти на адмін-панель, якщо користувач не має userId (хоча він повинен бути з анонімним входом)
+            if (window.location.hash === '#admin' && !user) {
+                 window.location.hash = '#properties';
+            }
+        }
+
+        // --- 4. CRUD Функції для Адміна ---
+
+        const PROPERTIES_COLLECTION_PATH = (appId) => `artifacts/${appId}/public/data/properties`;
+
+        /**
+         * Створює об'єкт нерухомості в Firestore.
+         * @param {Event} e 
+         */
+        async function addProperty(e) {
+            e.preventDefault();
+            const form = document.getElementById('admin-add-edit-form');
+            // isAdmin тепер завжди true
+            if (!form) return;
+            
+            const data = new FormData(form);
+            
+            const newProperty = {
+                type: data.get('type'),
+                deal: data.get('deal'),
+                district: data.get('district'),
+                price: parseInt(data.get('price'), 10),
+                area: parseInt(data.get('area'), 10),
+                rooms: parseInt(data.get('rooms'), 10),
+                baths: parseInt(data.get('baths'), 10),
+                image: data.get('image'),
+                title: {
+                    ua: data.get('title_ua'),
+                    en: data.get('title_en')
+                },
+                description: {
+                    ua: data.get('description_ua'),
+                    en: data.get('description_en')
+                },
+                features: {
+                    nearCenter: form.elements.nearCenter.checked,
+                    nearMetro: form.elements.nearMetro.checked,
+                    nearSchool: form.elements.nearSchool.checked
+                },
+                timestamp: Date.now()
+            };
+
+            try {
+                await addDoc(collection(db, PROPERTIES_COLLECTION_PATH(__app_id)), newProperty);
+                toggleAdminForm(false);
+                form.reset();
+                showMessage('Успіх', `Об'єкт успішно додано.`);
+            } catch (error) {
+                console.error("Помилка додавання об'єкта:", error);
+                showMessage('Помилка', 'Не вдалося додати об\'єкт. Перевірте консоль.');
+            }
+        }
+
+        /**
+         * Оновлює існуючий об'єкт нерухомості в Firestore.
+         * @param {Event} e 
+         */
+        async function editProperty(e) {
+            e.preventDefault();
+            const form = document.getElementById('admin-add-edit-form');
+            const propertyId = form.dataset.editId;
+            // isAdmin тепер завжди true
+            if (!propertyId) return;
+
+            const data = new FormData(form);
+            
+            const updatedProperty = {
+                type: data.get('type'),
+                deal: data.get('deal'),
+                district: data.get('district'),
+                price: parseInt(data.get('price'), 10),
+                area: parseInt(data.get('area'), 10),
+                rooms: parseInt(data.get('rooms'), 10),
+                baths: parseInt(data.get('baths'), 10),
+                image: data.get('image'),
+                title: {
+                    ua: data.get('title_ua'),
+                    en: data.get('title_en')
+                },
+                description: {
+                    ua: data.get('description_ua'),
+                    en: data.get('description_en')
+                },
+                features: {
+                    nearCenter: form.elements.nearCenter.checked,
+                    nearMetro: form.elements.nearMetro.checked,
+                    nearSchool: form.elements.nearSchool.checked
+                },
+            };
+
+            try {
+                await updateDoc(doc(db, PROPERTIES_COLLECTION_PATH(__app_id), propertyId), updatedProperty);
+                toggleAdminForm(false);
+                delete form.dataset.editId;
+                form.reset();
+                showMessage('Успіх', `Об'єкт ${propertyId} успішно оновлено.`);
+            } catch (error) {
+                console.error("Помилка оновлення об'єкта:", error);
+                showMessage('Помилка', 'Не вдалося оновити об\'єкт. Перевірте консоль.');
+            }
+        }
+
+        /**
+         * Видаляє об'єкт нерухомості.
+         * @param {string} propertyId 
+         */
+        window.deleteProperty = async function(propertyId) {
+            // isAdmin тепер завжди true
+            const t = translations[window.currentLanguage];
+
+            const confirmed = await confirmMessage(
+                t['admin_delete_title'] || 'Видалення Об\'єкта',
+                t['admin_delete_confirm']
+            );
+
+            if (confirmed) {
+                try {
+                    await deleteDoc(doc(db, PROPERTIES_COLLECTION_PATH(__app_id), propertyId));
+                    showMessage('Успіх', `Об'єкт ${propertyId} успішно видалено.`);
+                } catch (error) {
+                    console.error("Помилка видалення об'єкта:", error);
+                    showMessage('Помилка', 'Не вдалося видалити об\'єкт.');
+                }
+            }
+        }
+
+        /**
+         * Відкриває форму адміна для редагування існуючого об'єкта.
+         * @param {string} propertyId 
+         */
+        window.openEditForm = function(propertyId) {
+            // isAdmin тепер завжди true
+            
+            const property = window.latestProperties.find(p => p.id === propertyId);
+            if (!property) {
+                showMessage('Помилка', `Об'єкт з ID ${propertyId} не знайдено для редагування.`);
+                return;
+            }
+
+            const form = document.getElementById('admin-add-edit-form');
+            if (!form) return;
+            
+            form.reset();
+            
+            // Встановлення ID для режиму редагування
+            form.dataset.editId = property.id; 
+            
+            // Заповнення форми даними
+            document.getElementById('admin_type').value = property.type || '';
+            document.getElementById('admin_deal').value = property.deal || '';
+            document.getElementById('admin_district').value = property.district || '';
+            document.getElementById('admin_price').value = property.price || '';
+            document.getElementById('admin_area').value = property.area || '';
+            document.getElementById('admin_rooms').value = property.rooms || '';
+            document.getElementById('admin_baths').value = property.baths || '';
+            document.getElementById('admin_image').value = property.image || '';
+            document.getElementById('admin_title_ua').value = property.title?.ua || '';
+            document.getElementById('admin_description_ua').value = property.description?.ua || '';
+            document.getElementById('admin_title_en').value = property.title?.en || '';
+            document.getElementById('admin_description_en').value = property.description?.en || '';
+
+            form.elements.nearCenter.checked = property.features?.nearCenter || false;
+            form.elements.nearMetro.checked = property.features?.nearMetro || false;
+            form.elements.nearSchool.checked = property.features?.nearSchool || false;
+
+            // Оновлення заголовка та тексту кнопки
+            document.getElementById('admin-form-title').textContent = translations[window.currentLanguage]['admin_edit_title'];
+            document.getElementById('form-submit-btn').querySelector('span').textContent = translations[window.currentLanguage]['admin_edit_property_btn_text'];
+            
+            toggleAdminForm(true);
+            document.getElementById('admin-form-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Перемикає видимість форми адміністрування.
+         * @param {boolean} show - Примусово показати/сховати.
+         */
+        window.toggleAdminForm = function(show) {
+            const container = document.getElementById('admin-form-container');
+            if (!container) return;
+
+            if (show === undefined) {
+                container.classList.toggle('hidden');
+            } else if (show) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+
+        // --- 5. Рендеринг та Фільтрація Властивостей (Home View) ---
+
+        /**
+         * Створює HTML-картку для одного об'єкта нерухомості.
+         * @param {object} property - Об'єкт нерухомості з Firestore (включно з ID).
+         * @param {string} lang - Мова рендерингу.
+         * @returns {string} HTML-рядок.
+         */
+        function createPropertyCard(property, lang) {
+            const t = translations[lang];
+            const title = property.title?.[lang] || property.title?.ua || 'No Title';
+            const description = (property.description?.[lang] || property.description?.ua || 'No description').substring(0, 100) + '...';
+            const dealText = property.deal === 'sale' ? t.card_sale : t.card_rent;
+            const priceFormatted = new Intl.NumberFormat(lang === 'ua' ? 'uk-UA' : 'en-US', { 
+                style: 'currency', currency: 'USD', maximumFractionDigits: 0 
+            }).format(property.price);
+
+            const featuresHtml = `
+                <div class="flex items-center space-x-2 text-xs text-gray-500 mt-2">
+                    ${property.features?.nearCenter ? '<span class="px-2 py-0.5 bg-green-100 text-green-700 rounded-full">Центр</span>' : ''}
+                    ${property.features?.nearMetro ? '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">Метро</span>' : ''}
+                    ${property.features?.nearSchool ? '<span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">Школа/Садок</span>' : ''}
+                </div>
+            `;
+            
+            return `
+                <div class="bg-white rounded-xl overflow-hidden card-shadow flex flex-col">
+                    <div class="relative h-60 bg-gray-200">
+                        <img src="${property.image}" alt="${title}" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/333333/ffffff?text=${property.type}'" 
+                             class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-golden text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                            ${dealText}
+                        </span>
+                        <span class="absolute top-3 right-3 bg-dark text-white text-sm font-semibold px-3 py-1 rounded-full opacity-90">
+                            ${property.district}
+                        </span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-dark mb-2">${title}</h3>
+                        <p class="text-golden text-2xl font-extrabold mb-3">${priceFormatted}</p>
+                        <p class="text-gray-600 mb-4 text-sm flex-grow">${description}</p>
+                        
+                        <!-- Details Icons -->
+                        <div class="flex space-x-6 text-gray-700 font-medium border-t pt-4 mt-auto">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bed text-golden mr-2"></i> 
+                                <span>${property.rooms}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bath text-golden mr-2"></i> 
+                                <span>${property.baths}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-ruler-combined text-golden mr-2"></i> 
+                                <span>${property.area} м²</span>
+                            </div>
+                        </div>
+
+                        ${featuresHtml}
+                    </div>
+                </div>
+            `;
+        }
+        
+        /**
+         * Застосовує фільтри з форми пошуку до масиву властивостей.
+         * @param {Array<object>} properties - Масив об'єктів нерухомості.
+         * @returns {Array<object>} - Відфільтрований масив.
+         */
+        function applyFilters(properties) {
+            const form = document.getElementById('property-search-form');
+            if (!form) return properties; 
+            
+            const data = new FormData(form);
+
+            const deal = data.get('deal');
+            const type = data.get('type');
+            const district = data.get('district');
+            const roomsMin = parseInt(data.get('rooms'), 10) || 0;
+            const priceMin = parseInt(data.get('price_min'), 10) || 0;
+            const priceMax = parseInt(data.get('price_max'), 10) || Infinity;
+            const areaMin = parseInt(data.get('area_min'), 10) || 0;
+            const bathsMin = parseInt(data.get('baths'), 10) || 0;
+
+            return properties.filter(prop => {
+                if (deal && prop.deal !== deal) return false;
+                if (type && prop.type !== type) return false;
+                if (district && prop.district !== district) return false;
+                if (prop.rooms < roomsMin) return false;
+                if (prop.baths < bathsMin) return false;
+                if (prop.price < priceMin || prop.price > priceMax) return false;
+                if (prop.area < areaMin) return false;
+
+                return true;
+            });
+        }
+
+        /**
+         * Рендерить властивості на сторінці Home View після фільтрації.
+         * @param {Array<object>} properties - Масив об'єктів нерухомості.
+         * @param {string} lang - Мова рендерингу.
+         */
+        function renderProperties(properties, lang) {
+            const listEl = document.getElementById('property-list');
+            const loadingMsg = document.getElementById('loading-message');
+            const noPropertiesMsg = document.getElementById('no-properties-message');
+
+            if (!listEl || !loadingMsg || !noPropertiesMsg) {
+                return; 
+            }
+
+            // 1. Застосування фільтрів
+            const filteredProperties = applyFilters(properties);
+
+            // 2. Сортування (за Timestamp - найновіші перші)
+            filteredProperties.sort((a, b) => b.timestamp - a.timestamp);
+
+            // 3. Рендеринг
+            listEl.innerHTML = filteredProperties.map(prop => createPropertyCard(prop, lang)).join('');
+            
+            // 4. Оновлення повідомлень
+            loadingMsg.classList.add('hidden');
+            if (filteredProperties.length === 0) {
+                 noPropertiesMsg.classList.remove('hidden');
+            } else {
+                noPropertiesMsg.classList.add('hidden');
+            }
+        }
+        
+        // --- 6. Рендеринг Адмін-Панелі (Admin View) ---
+
+        /**
+         * Рендерить список об'єктів у вигляді таблиці для адмін-панелі.
+         * @param {Array<object>} properties - Масив об'єктів нерухомості.
+         * @param {string} lang - Мова рендерингу.
+         */
+        function renderAdminTable(properties, lang) {
+            const tableContainer = document.getElementById('admin-table-container');
+            if (!tableContainer) return;
+            const t = translations[lang];
+
+            // Сортування за часом додавання
+            properties.sort((a, b) => b.timestamp - a.timestamp);
+
+            const tableHtml = `
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_title}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_type}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_deal}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_district}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_price}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_area}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">${t.table_actions}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${properties.map(prop => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    ${(prop.title?.[lang] || prop.title?.ua || 'N/A').substring(0, 30)}...
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${prop.type}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${prop.deal}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${prop.district}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-bold">$${prop.price.toLocaleString()}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${prop.area}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                                    <button onclick="openEditForm('${prop.id}')" class="text-blue-600 hover:text-blue-900 transition duration-150">
+                                        <i class="fa-solid fa-pencil mr-1"></i> ${t.table_edit}
+                                    </button>
+                                    <button onclick="deleteProperty('${prop.id}')" class="text-red-600 hover:text-red-900 transition duration-150">
+                                        <i class="fa-solid fa-trash-can mr-1"></i> ${t.table_delete}
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            tableContainer.innerHTML = properties.length > 0 ? tableHtml : 
+                `<p class="text-center text-xl text-gray-500 py-10">${t.no_listings}</p>`;
+        }
+
+
+        // --- 7. Маршрутизація та Відображення Сторінок ---
+
+        /**
+         * Перемикає відображення сторінок (View) на основі URL-хешу.
+         */
+        function handleRoute() {
+            const hash = window.location.hash || '#properties';
+            const homeView = document.getElementById('home-view');
+            const adminView = document.getElementById('admin-view');
+
+            // Приховуємо усі види
+            document.querySelectorAll('.view').forEach(view => view.classList.add('hidden'));
+
+            // Оскільки isAdmin завжди true, просто перевіряємо хеш
+            if (hash === '#admin') {
+                adminView.classList.remove('hidden');
+                // Рендеримо адмін-таблицю при переході
+                renderAdminTable(window.latestProperties, window.currentLanguage);
+            } else {
+                homeView.classList.remove('hidden');
+                // Приховуємо форму адміна
+                toggleAdminForm(false);
+            }
+        }
+        
+        // --- 8. Firestore Real-time Listener ---
+
+        function setupRealtimeListeners() {
+            const propertiesRef = collection(db, PROPERTIES_COLLECTION_PATH(__app_id));
+            
+            onSnapshot(propertiesRef, (snapshot) => {
+                const propertiesList = [];
+                snapshot.forEach(doc => {
+                    propertiesList.push({ id: doc.id, ...doc.data() });
+                });
+                
+                window.latestProperties = propertiesList;
+                console.log("Оновлення властивостей:", propertiesList.length);
+                
+                // Рендеринг як для головної сторінки, так і для адмін-панелі
+                renderProperties(propertiesList, window.currentLanguage);
+                
+                // Якщо ми на адмін-сторінці, оновлюємо таблицю
+                if (window.location.hash === '#admin') {
+                    renderAdminTable(propertiesList, window.currentLanguage);
+                }
+            }, (error) => {
+                console.error("Помилка отримання об'єктів нерухомості:", error);
+                const msgEl = document.getElementById('loading-message');
+                if(msgEl) {
+                    msgEl.textContent = translations[window.currentLanguage].no_listings;
+                }
+            });
+        }
+
+        // --- 9. Ініціалізація та Обробники Подій ---
+
+        window.onload = (async () => {
+            // Ініціалізація Firebase з глобальними змінними Canvas
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase config is missing. Application cannot connect to database.");
+                return;
+            }
+
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // 1. Початкова автентифікація (Анонімно - для отримання userId, потрібного для Firestore)
+            try {
+                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Помилка початкової автентифікації:", error);
+            }
+
+            // 2. Налаштування слухача стану аутентифікації
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                } else {
+                    // Якщо анонімний вхід не вдався, userId буде null
+                    userId = null;
+                }
+                
+                // Оновлення UI (тепер лише адмін-лінк, який завжди видимий)
+                setupAuthUI(user); 
+
+                // Запуск слухача Firestore після першої автентифікації (анонімної чи ні)
+                if (!window.listenersInitialized) {
+                    setupRealtimeListeners();
+                    window.listenersInitialized = true;
+                }
+                
+                // Оновлення маршруту
+                handleRoute(); 
+            });
+
+            // 3. Налаштування маршрутизації
+            window.addEventListener('hashchange', handleRoute);
+            
+            // Встановлення початкової мови та року
+            setLanguage(window.currentLanguage);
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // 4. Налаштування форми адміністратора (Додавання/Редагування)
+            
+            // Обробник для кнопки "Додати Об'єкт" на адмін-панелі
+            const showAddFormBtn = document.getElementById('show-add-form-btn');
+            if (showAddFormBtn) {
+                showAddFormBtn.onclick = () => {
+                    const form = document.getElementById('admin-add-edit-form');
+                    if(form) {
+                        form.reset();
+                        delete form.dataset.editId;
+                        
+                        // Встановлення тексту для "Додати"
+                        document.getElementById('admin-form-title').textContent = translations[window.currentLanguage]['admin_add_title'];
+                        document.getElementById('form-submit-btn').querySelector('span').textContent = translations[window.currentLanguage]['admin_add_property_btn_text'];
+                        
+                        toggleAdminForm(true);
+                        document.getElementById('admin-form-container').scrollIntoView({ behavior: 'smooth' });
+                    }
+                };
+            }
+            
+            // Єдиний обробник для додавання/редагування
+            const adminForm = document.getElementById('admin-add-edit-form');
+            if(adminForm) {
+                adminForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    const isEditMode = adminForm.dataset.editId;
+                    if (isEditMode) {
+                        editProperty(e);
+                    } else {
+                        addProperty(e);
+                    }
+                };
+            }
+            
+            // 5. Налаштування форми пошуку
+            const searchForm = document.getElementById('property-search-form');
+            if(searchForm) {
+                searchForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    // Повторне рендерингу для застосування фільтрів
+                    renderProperties(window.latestProperties, window.currentLanguage);
+                    // Прокрутка до списку об'єктів
+                    document.getElementById('properties').scrollIntoView({ behavior: 'smooth' });
+                };
+            }
+            
+            // Встановлення початкового маршруту 
+            handleRoute();
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
